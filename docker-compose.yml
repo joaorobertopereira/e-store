@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+
+  mongodb:
+    container_name: mongo-container
+    image: mongo:latest
+    hostname: mongo-container
+    restart: always
+    volumes:
+      - mongodb-data-container:/data/db
+    networks:
+      - springbankNet
+    ports:
+      - '27017:27017'
+
+  axonserver:
+    container_name: axonserver-container
+    image: axoniq/axonserver:latest
+    hostname: axonserver-container
+    volumes:
+      - axonserver-data:/data
+      - axonserver-events:/eventdata
+      - axonserver-config:/config:ro
+    ports:
+      - '8024:8024'
+      - '8124:8124'
+      - '8224:8224'
+    networks:
+      - springbankNet
+
+#  user-query-api:
+#    container_name: user-query-api
+#    image: joaoroberto/user-query-api:latest
+#    hostname: user-query-api
+#    build: ./user-management/user.query.api
+#    working_dir: /user-management/user.query.api
+#    deploy:
+#      replicas: 1
+#    restart: always
+#    ports:
+#      - target: 8082
+#        published: 8082
+#        protocol: tcp
+#        mode: host
+#    depends_on:
+#      - mongodb
+#      - mysqldb
+#    command: mvn spring-boot:run -Dspring-boot.run.profiles=docker
+#    environment:
+#      - "SPRING_PROFILES_ACTIVE=docker"
+#    networks:
+#      - springbankNet
+
+
+volumes:
+  axonserver-data:
+  axonserver-events:
+  axonserver-config:
+  mongodb-data-container:
+
+networks:
+  springbankNet:
+    driver: bridge

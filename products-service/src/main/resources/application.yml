@@ -1,0 +1,29 @@
+# Spring
+server:
+  port: 0
+spring:
+  application:
+    name: product-service
+# MongoDB
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: products
+
+# AWS
+amazon:
+  aws:
+   accesskey: AKIA23H3IB55DFQJKL56
+   secretkey: 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
+   region: us-east-1
+  dynamodb:
+    endpoint: dynamodb.us-east-1.amazonaws.com
+
+# Eureka
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${instanceId:${random.value}}
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
