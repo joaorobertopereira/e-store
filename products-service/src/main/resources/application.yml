@@ -9,16 +9,7 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: products
-
-# AWS
-amazon:
-  aws:
-   accesskey: AKIA23H3IB55DFQJKL56
-   secretkey: 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
-   region: us-east-1
-  dynamodb:
-    endpoint: dynamodb.us-east-1.amazonaws.com
+      database: estore
 
 # Eureka
 eureka:

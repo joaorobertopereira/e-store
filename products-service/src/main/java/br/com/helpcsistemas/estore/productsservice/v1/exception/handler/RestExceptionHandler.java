@@ -4,10 +4,8 @@ import br.com.helpcsistemas.estore.productsservice.v1.exception.ExceptionDetails
 import br.com.helpcsistemas.estore.productsservice.v1.exception.ResourceNotFoundDetails;
 import br.com.helpcsistemas.estore.productsservice.v1.exception.ResourceNotFoundException;
 import br.com.helpcsistemas.estore.productsservice.v1.exception.ValidationExceptionDetails;
-import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,21 +34,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                         .build(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(AmazonDynamoDBException.class)
-    public ResponseEntity<ResourceNotFoundDetails> handleAmazonDynamoDBException(
-            AmazonDynamoDBException exception) {
-        return new ResponseEntity<>(
-                ResourceNotFoundDetails.builder()
-                        .timestamp(LocalDateTime.now())
-                        .status(HttpStatus.BAD_REQUEST.value())
-                        .title("DynamoDB Error")
-                        .detail(exception.getMessage())
-                        .developerMessage(exception.getClass().getName())
-                        .build(), HttpStatus.BAD_REQUEST);
-    }
-// .
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
 
         String fields = fieldErrors.stream().map(FieldError::getField).collect(Collectors.joining(", "));
@@ -69,8 +54,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                         .build(), HttpStatus.BAD_REQUEST);
     }
 
+
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ExceptionDetails exceptionDetails = ExceptionDetails.builder()
                 .timestamp(LocalDateTime.now())
                 .status(status.value())

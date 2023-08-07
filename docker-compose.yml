@@ -9,7 +9,7 @@ services:
     volumes:
       - mongodb-data-container:/data/db
     networks:
-      - springbankNet
+      - estore-network
     ports:
       - '27017:27017'
 
@@ -26,7 +26,7 @@ services:
       - '8124:8124'
       - '8224:8224'
     networks:
-      - springbankNet
+      - estore-network
 
 #  user-query-api:
 #    container_name: user-query-api
@@ -49,7 +49,7 @@ services:
 #    environment:
 #      - "SPRING_PROFILES_ACTIVE=docker"
 #    networks:
-#      - springbankNet
+#      - estore-network
 
 
 volumes:
@@ -59,5 +59,5 @@ volumes:
   mongodb-data-container:
 
 networks:
-  springbankNet:
+  estore-network:
     driver: bridge
