@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseMessage implements Serializable {
+public class ResponseMessageDto implements Serializable {
     private Integer code;
     private String message;
 }

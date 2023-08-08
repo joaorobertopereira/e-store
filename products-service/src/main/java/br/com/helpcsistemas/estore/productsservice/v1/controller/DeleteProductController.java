@@ -1,7 +1,7 @@
 package br.com.helpcsistemas.estore.productsservice.v1.controller;
 
 import br.com.helpcsistemas.estore.productsservice.v1.command.DeleteProductCommand;
-import br.com.helpcsistemas.estore.productsservice.v1.dto.ResponseMessage;
+import br.com.helpcsistemas.estore.productsservice.v1.dto.ResponseMessageDto;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,27 +24,27 @@ public class DeleteProductController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<ResponseMessage> deleteProduct(@PathVariable(value = "id") String id) {
+    public ResponseEntity<ResponseMessageDto> deleteProduct(@PathVariable(value = "id") String id) {
 
         DeleteProductCommand command = DeleteProductCommand.builder()
                 .id(id).build();
 
-        ResponseMessage responseMessage = null;
+        ResponseMessageDto responseMessageDto = null;
         try {
 
             commandGateway.sendAndWait(command);
-            responseMessage = ResponseMessage.builder()
+            responseMessageDto = ResponseMessageDto.builder()
                     .code(HttpStatus.OK.value())
                     .message("The Product has updated as success.").build();
         } catch (Exception ex) {
             log.error(ex.getMessage());
-            responseMessage = ResponseMessage.builder()
+            responseMessageDto = ResponseMessageDto.builder()
                     .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                     .message(ex.getMessage()).build();
-            return new ResponseEntity<>(responseMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(responseMessageDto, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+        return new ResponseEntity<>(responseMessageDto, HttpStatus.OK);
     }
 
 }

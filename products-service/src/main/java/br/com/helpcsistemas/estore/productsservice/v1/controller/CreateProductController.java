@@ -1,7 +1,7 @@
 package br.com.helpcsistemas.estore.productsservice.v1.controller;
 
 import br.com.helpcsistemas.estore.productsservice.v1.command.CreateProductCommand;
-import br.com.helpcsistemas.estore.productsservice.v1.dto.ResponseMessage;
+import br.com.helpcsistemas.estore.productsservice.v1.dto.ResponseMessageDto;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,27 +27,27 @@ public class CreateProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseMessage> createProduct(@Valid @RequestBody CreateProductCommand command) {
+    public ResponseEntity<ResponseMessageDto> createProduct(@Valid @RequestBody CreateProductCommand command) {
 
         String id = UUID.randomUUID().toString();
         command.setId(id);
 
-        ResponseMessage responseMessage = null;
+        ResponseMessageDto responseMessageDto = null;
         try {
 
             commandGateway.sendAndWait(command);
-            responseMessage = ResponseMessage.builder()
+            responseMessageDto = ResponseMessageDto.builder()
                     .code(HttpStatus.CREATED.value())
                     .message("The Product has created as success.").build();
         } catch (Exception ex) {
             log.error(ex.getMessage());
-            responseMessage = ResponseMessage.builder()
+            responseMessageDto = ResponseMessageDto.builder()
                     .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                     .message(ex.getMessage()).build();
-            return new ResponseEntity<>(responseMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(responseMessageDto, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(responseMessage, HttpStatus.CREATED);
+        return new ResponseEntity<>(responseMessageDto, HttpStatus.CREATED);
     }
 
 
